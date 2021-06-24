@@ -968,8 +968,8 @@ export default class NodePath {
   markContainsSecret() {
     let path = this;
     while ((path = path.parentPath)) {
-      path.containsSecret ??= true;
-      path.node.containsSecret ??= true;
+      path.containsSecret = true;
+      path.node.containsSecret = true;
       const indicator = path.scope.getReferencedIndicator(path.node, true);
       // we don't want to add itself as an interacted with path
       if (indicator && this.node.referencedDeclaration !== indicator.id)
@@ -980,8 +980,8 @@ export default class NodePath {
   markContainsPublic() {
     let path = this;
     while ((path = path.parentPath)) {
-      path.containsPublic ??= true;
-      path.node.containsPublic ??= true;
+      path.containsPublic = true;
+      path.node.containsPublic = true;
       const indicator = path.scope.getReferencedIndicator(path.node, true);
       // we don't want to add itself as an interacted with path
       if (indicator && this.node.referencedDeclaration !== indicator.id)

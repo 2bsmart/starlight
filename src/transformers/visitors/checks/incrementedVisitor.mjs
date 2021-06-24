@@ -49,7 +49,7 @@ const getIncrementedPath = (path, state) => {
     const lhsAncestor = path.getLhsAncestor();
     if (lhsAncestor.nodeType === 'IndexAccess') {
       // we want the incrementedPath to be the baseExpression if isMapping
-      state.incrementedIdentifier ??= lhsAncestor.node?.baseExpression;
+      state.incrementedIdentifier = lhsAncestor.node?.baseExpression;
     } else if (lhsAncestor.nodeType === 'Identifier') {
       state.incrementedPath = lhsAncestor;
     }
@@ -91,8 +91,8 @@ export default {
       const expressionNode = node.expression;
 
       // if we haven't marked it yet, then it's not an incrementation - we mark as false
-      path.isIncremented ??= false;
-      path.isDecremented ??= false;
+      path.isIncremented = false;
+      path.isDecremented = false;
       state.unmarkedIncrementation = false;
 
       // we mark the expression node
@@ -346,8 +346,8 @@ export default {
           }
           // if none, go to the next operand
           if (operand.indexExpression?.expression?.name === 'msg')
-            operand.indexExpression.name ??= `msg.sender`;
-          operand.name ??= `${operand.baseExpression.name}[${operand.indexExpression.name}]`;
+            operand.indexExpression.name = `msg.sender`;
+          operand.name = `${operand.baseExpression.name}[${operand.indexExpression.name}]`;
         }
         // if we have 1*a on the RHS and its incremented, mark the parent path
         if (discoveredLHS === 1 && isIncremented.incremented) {

@@ -301,9 +301,9 @@ export class StateVariableIndicator {
 
   updateProperties(path) {
     this.addReferencingPath(path);
-    this.isUnknown ??= path.node.isUnknown;
-    this.isKnown ??= path.node.isKnown;
-    this.reinitialisable ??= path.node.reinitialisable;
+    this.isUnknown = path.node.isUnknown;
+    this.isKnown = path.node.isKnown;
+    this.reinitialisable = path.node.reinitialisable;
     if (path.isModification()) {
       this.addModifyingPath(path);
     }
@@ -327,18 +327,18 @@ export class StateVariableIndicator {
 
   updateFromBinding() {
     // it's possible we dont know in this fn scope whether a state is whole/owned or not, but the binding (contract scope) will
-    this.isWhole ??= this.binding.isWhole;
+    this.isWhole = this.binding.isWhole;
     this.isWholeReason = this.isWhole
       ? this.binding.isWholeReason
       : this.isWholeReason;
-    this.isPartitioned ??= this.binding.isPartitioned;
+    this.isPartitioned = this.binding.isPartitioned;
     this.isPartitionedReason = this.isPartitioned
       ? this.binding.isPartitionedReason
       : this.isPartitionedReason;
-    this.isOwned ??= this.binding.isOwned;
-    this.owner ??= this.binding.owner;
-    this.onChainKeyRegistry ??= this.binding.onChainKeyRegistry;
-    this.parentIndicator.onChainKeyRegistry ??= this.binding.onChainKeyRegistry;
+    this.isOwned = this.binding.isOwned;
+    this.owner = this.binding.owner;
+    this.onChainKeyRegistry = this.binding.onChainKeyRegistry;
+    this.parentIndicator.onChainKeyRegistry = this.binding.onChainKeyRegistry;
     if (this.isMapping) {
       this.mappingOwnershipType = this.owner?.mappingOwnershipType;
       for (const [, mappingKey] of Object.entries(this.mappingKeys)) {
@@ -355,12 +355,12 @@ export class StateVariableIndicator {
     this.parentIndicator.initialisationRequired = true;
     this.parentIndicator.parentIndicator.oldCommitmentAccessRequired = true;
     const reason = { src: path.node.src, 0: `Accessed` };
-    this.isWholeReason ??= [];
+    this.isWholeReason = [];
     this.isWholeReason.push(reason);
-    this.accessedPaths ??= [];
+    this.accessedPaths = [];
     this.accessedPaths.push(path);
     if (this.isMapping) {
-      this.addMappingKey(path).accessedPaths ??= [];
+      this.addMappingKey(path).accessedPaths = [];
       this.addMappingKey(path).accessedPaths.push(path);
     }
   }
@@ -370,7 +370,7 @@ export class StateVariableIndicator {
     if (!path.isIncremented || state.incrementedIdentifier.isKnown) {
       this.isWhole = true;
       const reason = { src: state.incrementedIdentifier.src, 0: `Overwritten` };
-      this.isWholeReason ??= [];
+      this.isWholeReason = [];
       this.isWholeReason.push(reason);
       // a reinitialised state does not require a nullifier
       if (
@@ -390,8 +390,8 @@ export class StateVariableIndicator {
         src: state.incrementedIdentifier.src,
         0: `Incremented and marked as unknown`,
       };
-      this.isUnknown ??= true;
-      this.isPartitionedReason ??= [];
+      this.isUnknown = true;
+      this.isPartitionedReason = [];
       this.isPartitionedReason.push(reason);
     }
     // if its known, we already added the path
@@ -400,10 +400,10 @@ export class StateVariableIndicator {
     }
     // if its incremented anywhere, isIncremented = true
     // so we only assign if it's already falsey
-    this.isIncremented ||= path.isIncremented;
-    this.isDecremented ||= path.isDecremented;
-    this.increments ??= [];
-    this.decrements ??= [];
+    this.isIncremented = path.isIncremented;
+    this.isDecremented = path.isDecremented;
+    this.increments = [];
+    this.decrements = [];
     state.increments.forEach(inc => {
       this.increments.push(inc);
     });
@@ -572,9 +572,9 @@ export class MappingKey {
 
   updateProperties(path) {
     this.addReferencingPath(path);
-    this.isUnknown ??= path.node.isUnknown;
-    this.isKnown ??= path.node.isKnown;
-    this.reinitialisable ??= path.node.reinitialisable;
+    this.isUnknown = path.node.isUnknown;
+    this.isKnown = path.node.isKnown;
+    this.reinitialisable = path.node.reinitialisable;
     if (path.isModification()) this.addModifyingPath(path);
 
     this.container.updateProperties(path);
@@ -663,7 +663,7 @@ export class MappingKey {
     if (!path.isIncremented || state.incrementedIdentifier.isKnown) {
       this.isWhole = true;
       const reason = { src: state.incrementedIdentifier.src, 0: `Overwritten` };
-      this.isWholeReason ??= [];
+      this.isWholeReason = [];
       this.isWholeReason.push(reason);
       if (state.incrementedPath && !state.incrementedIdentifier.reinitialisable)
         this.addNullifyingPath(state.incrementedPath);
@@ -677,18 +677,18 @@ export class MappingKey {
         src: state.incrementedIdentifier.src,
         0: `Incremented and marked as unknown`,
       };
-      this.isUnknown ??= true;
-      this.isPartitionedReason ??= [];
+      this.isUnknown = true;
+      this.isPartitionedReason = [];
       this.isPartitionedReason.push(reason);
     }
     if (path.isDecremented && !state.incrementedIdentifier.isKnown)
       this.addNullifyingPath(state.incrementedPath);
     // if its incremented anywhere, isIncremented = true
     // so we only assign if it's already falsey
-    this.isIncremented ||= path.isIncremented;
-    this.isDecremented ||= path.isDecremented;
-    this.increments ??= [];
-    this.decrements ??= [];
+    this.isIncremented = path.isIncremented;
+    this.isDecremented = path.isDecremented;
+    this.increments = [];
+    this.decrements = [];
     state.increments.forEach(inc => {
       this.increments.push(inc);
     });
@@ -699,17 +699,17 @@ export class MappingKey {
 
   updateFromBinding() {
     // it's possible we dont know in this fn scope whether a state is whole/owned or not, but the binding (contract scope) will
-    this.isWhole ??= this.container.binding.isWhole;
+    this.isWhole = this.container.binding.isWhole;
     this.isWholeReason = this.isWhole
       ? this.container.binding.isWholeReason
       : this.isWholeReason;
-    this.isPartitioned ??= this.container.binding.isPartitioned;
+    this.isPartitioned = this.container.binding.isPartitioned;
     this.isPartitionedReason = this.isPartitioned
       ? this.container.binding.isPartitionedReason
       : this.isPartitionedReason;
-    this.isOwned ??= this.container.binding.isOwned;
-    this.owner ??= this.container.binding.owner;
+    this.isOwned = this.container.binding.isOwned;
+    this.owner = this.container.binding.owner;
     this.mappingOwnershipType = this.owner?.mappingOwnershipType;
-    this.onChainKeyRegistry ??= this.container.binding.onChainKeyRegistry;
+    this.onChainKeyRegistry = this.container.binding.onChainKeyRegistry;
   }
 }

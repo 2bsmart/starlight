@@ -20,9 +20,9 @@ const fixIncrementName = (stateVarIndicator, inc) => {
       inc.name = inc.rightExpression.name;
     if (inc.rightExpression.name === stateVarIndicator.name)
       inc.name = inc.leftExpression.name;
-    inc.leftExpression.name ??= `generalise(${inc.leftExpression.value})`;
-    inc.rightExpression.name ??= `generalise(${inc.rightExpression.value})`;
-    inc.name ??= `${inc.leftExpression.name} ${inc.operator} ${inc.rightExpression.name}`;
+    inc.leftExpression.name = `generalise(${inc.leftExpression.value})`;
+    inc.rightExpression.name = `generalise(${inc.rightExpression.value})`;
+    inc.name = `${inc.leftExpression.name} ${inc.operator} ${inc.rightExpression.name}`;
   }
 };
 /**
@@ -82,7 +82,7 @@ export default {
   ImportDirective: {
     enter(path, state) {
       const { node, parent } = path;
-      state.contractImports ??= [];
+      state.contractImports = [];
       state.contractImports.push({
         absolutePath: node.absolutePath,
         file: node.file,
@@ -124,7 +124,7 @@ export default {
       } else {
         state.skipSubNodes = true;
         if (node.kind === 'constructor') {
-          state.constructorParams ??= [];
+          state.constructorParams = [];
           for (const param of node.parameters.parameters) {
             state.constructorParams.push(
               buildNode('VariableDeclaration', {
@@ -141,7 +141,7 @@ export default {
 
     exit(path, state) {
       const { node, parent, scope } = path;
-      node._newASTPointer.msgSenderParam ??= state.msgSenderParam;
+      node._newASTPointer.msgSenderParam = state.msgSenderParam;
       const initialiseOrchestrationBoilerplateNodes = fnIndicator => {
         const newNodes = {};
         const contractName = `${parent.name}Shield`;
@@ -269,7 +269,7 @@ export default {
 
           if (stateVarIndicator.isDecremented) {
             // TODO refactor
-            node._newASTPointer.decrementedSecretStates ??= [];
+            node._newASTPointer.decrementedSecretStates = [];
             node._newASTPointer.decrementedSecretStates.push(name);
             node._newASTPointer.decrementsSecretState = true;
             thisIntegrationTestFunction.decrementsSecretState = true;
@@ -611,7 +611,7 @@ export default {
           interactsWithSecretVisitor,
           newState,
         );
-        modifiesSecretState ||= newState.interactsWithSecret;
+        modifiesSecretState = newState.interactsWithSecret;
       });
 
       if (

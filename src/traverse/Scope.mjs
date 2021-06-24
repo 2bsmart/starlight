@@ -231,7 +231,7 @@ export class Scope {
 
         // msg.sender might not be a 'top level' argument of the require statement - perhaps it's nested within some more complex expression. We look for it in order to throw an 'unsupported' error. TODO: figure out how to infer restrictions in this case.
         const findMsgSenderVisitor = (path, state) => {
-          state.found ||= path.isMsgSender();
+          state.found = path.isMsgSender();
         };
         const subState = {};
         path.traversePathsFast(findMsgSenderVisitor, subState);

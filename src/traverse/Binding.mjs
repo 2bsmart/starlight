@@ -193,9 +193,9 @@ export default class Binding {
 
   updateProperties(path) {
     this.addReferencingPath(path);
-    this.isUnknown ??= path.node.isUnknown;
-    this.isKnown ??= path.node.isKnown;
-    this.reinitialisable ??= path.node.reinitialisable;
+    this.isUnknown = path.node.isUnknown;
+    this.isKnown = path.node.isKnown;
+    this.reinitialisable = path.node.reinitialisable;
     if (path.isModification()) this.addModifyingPath(path);
   }
 
@@ -267,7 +267,7 @@ export default class Binding {
   }
 
   updateBlacklist(blacklistedNode) {
-    this.blacklist ??= [];
+    this.blacklist = [];
     this.blacklist.push(blacklistedNode);
   }
 
@@ -277,7 +277,7 @@ export default class Binding {
     this.isWhole = true;
     this.isAccessed = true;
     const reason = { src: path.node.src, 0: `Accessed` };
-    this.isWholeReason ??= [];
+    this.isWholeReason = [];
     this.isWholeReason.push(reason);
   }
 
@@ -288,7 +288,7 @@ export default class Binding {
     if (!path.isIncremented) {
       this.isWhole = true;
       const reason = { src: state.incrementedIdentifier.src, 0: `Overwritten` };
-      this.isWholeReason ??= [];
+      this.isWholeReason = [];
       this.isWholeReason.push(reason);
     } else if (
       !path.isDecremented &&
@@ -300,8 +300,8 @@ export default class Binding {
         src: state.incrementedIdentifier.src,
         0: `Incremented and marked as unknown`,
       };
-      this.isUnknown ??= true;
-      this.isPartitionedReason ??= [];
+      this.isUnknown = true;
+      this.isPartitionedReason = [];
       this.isPartitionedReason.push(reason);
     }
   }
@@ -435,12 +435,12 @@ export default class Binding {
       if (this.isMapping && this.addMappingKey(path).isMsgSender) {
         // if its unassigned, we assign true
         // if its true, it remains true
-        msgSenderEverywhereMappingKey ??= true;
+        msgSenderEverywhereMappingKey = true;
       } else if (
         this.isMapping &&
         path.isMsgSender(path.getCorrespondingRhsNode())
       ) {
-        msgSenderEverywhereMappingValue ??= true;
+        msgSenderEverywhereMappingValue = true;
       } else {
         // if we find a single non-msg sender mapping key, then msg sender can't be the owner
         msgSenderEverywhereMappingKey = false;
@@ -592,9 +592,9 @@ export class MappingKey {
 
   updateProperties(path) {
     this.addReferencingPath(path);
-    this.isUnknown ??= path.node.isUnknown;
-    this.isKnown ??= path.node.isKnown;
-    this.reinitialisable ??= path.node.reinitialisable;
+    this.isUnknown = path.node.isUnknown;
+    this.isKnown = path.node.isKnown;
+    this.reinitialisable = path.node.reinitialisable;
     if (path.isModification()) this.addModifyingPath(path);
 
     this.container.updateProperties(path);
